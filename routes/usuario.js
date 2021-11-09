@@ -1,3 +1,4 @@
+require('dotenv').config()
 const Router = require('express')
 const { crear } = require('../controllers/usuarios')
 const router = Router()

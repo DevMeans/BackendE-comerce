@@ -1,16 +1,22 @@
 const express = require('express')
 const cors = require('cors')
+const { ConexionMongoDB } = require('../database/config')
 class Server {
 
     constructor() {
         this.app = express()
-        this.port = 3000
+        this.port = process.env.PORT
         this.paths = {
             usuario: '/api/usuario'
         }
+        this.conexMongoDB()
         this.middlewares()
         this.routes()
     }
+    async conexMongoDB() {
+        await ConexionMongoDB()
+    }
+
     middlewares() {
         this.app.use(cors())
         this.app.use(express.json())
@@ -18,7 +24,7 @@ class Server {
     routes() {
         this.app.use(this.paths.usuario, require('../routes/usuario'))
     }
-    listen(){
+    listen() {
         this.app.listen(this.port, () => console.log(`Servidor corriendo en el puerto  ${this.port}`))
     }
 
