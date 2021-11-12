@@ -13,7 +13,7 @@ const crearUsuario = async (req = request, res = response) => {
     })
 }
 
-const actualizarUsuaurio = (req = request, res = response) => {
+const actualizarUsuaurio = async (req = request, res = response) => {
     const { id } = req.params
     const { password, rol, estado, ...newBody } = req.body
     const usuarioDB = await usuario.findByIdAndUpdate(id, newBody)
@@ -29,28 +29,59 @@ const actualizarUsuaurio = (req = request, res = response) => {
     })
 
 }
-const actulziarEstadoUsuario = (req = request, res = response) => {
+const actulziarEstadoUsuario = async (req = request, res = response) => {
     const { id } = req.params
     const { estado } = req.body
     const usuarioDB = await usuario.findByIdAndUpdate(id, estado)
-    if(!usuarioDB){
+    if (!usuarioDB) {
         return res.status(404).json({
-            ok:false,
+            ok: false,
             msg: `usuario con el id ${id} no existe`
         })
     }
     return res.json({
-        ok:false,
+        ok: false,
         msg: `usuario actualizado correctamente`
     })
 }
-const listarUsuarios=(req = request, res = response)=>{
-    const { limite,desde } =req.params
-    
+const ObtenerUsuario = async (req = request, res = response) => {
+    const { id } = req.params
+    const usuarioDB = await usuario.findById(id)
+    if (!usuarioDB) {
+        return res.status(404).json({
+            ok: false,
+            msg: `usuario con el id ${id} no existe`
+        })
+    }
+    return res.json({
+        ok: true,
+        results: usuarioDB
+
+    })
 }
+
+const listarUsuarios = async (req = request, res = response) => {
+    const { limite = 5, desde = 0 } = Number(req.params)
+    const [usuarios, total] = await Promise.all([
+        usuario.find().
+            skip(desde).
+            limit(limite),
+        usuario.count()
+    ])
+    res.json({
+        ok: true,
+        results: usuarios,
+        total
+    })
+
+}
+
+
 
 module.exports = {
     crearUsuario,
     actualizarUsuaurio,
-    actulziarEstadoUsuario
+    actulziarEstadoUsuario,
+    ObtenerUsuario,
+    listarUsuarios
 }
