@@ -1,6 +1,6 @@
 const Router = require('express')
 const { check } = require('express-validator')
-const { crearUsuario } = require('../controllers/usuarios')
+const { crearUsuario, actualizarUsuaurio, actulziarEstadoUsuario, listarUsuarios, ObtenerUsuario } = require('../controllers/usuarios')
 const { validarCorreo } = require('../helpers/db-validators')
 const { validarCampos } = require('../middlewares/validar-campos')
 const router = Router()
@@ -13,5 +13,21 @@ router.post('/', [
     validarCampos
 ],
     crearUsuario)
+router.put('/:id', [
+    check('correo').custom(validarCorreo),
+    validarCampos
+],
+    actualizarUsuaurio
+)
 
+router.put('/estado/:id', [
+    check('estado', 'No es un rol valido').isIn(['true', 'false']),
+    validarCampos
+],
+    actulziarEstadoUsuario
+)
+router.get('/', [],
+    listarUsuarios)
+router.get('/:id', [],
+    ObtenerUsuario)
 module.exports = router

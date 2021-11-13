@@ -1,10 +1,13 @@
-
+const bcryptjs = require('bcryptjs');
 const { response, request, json } = require("express")
 const usuario = require("../models/usuario")
 
 const crearUsuario = async (req = request, res = response) => {
-    const body = req.body
-    const usuarioDB = new usuario(body)
+    const {estado,rol,password, ...newBody} = req.body
+    const salt = bcryptjs.genSaltSync();
+    pwsecrp = bcryptjs.hashSync(password, salt);
+    newBody.password = pwsecrp
+    const usuarioDB = new usuario(newBody)
     await usuarioDB.save()
     res.json({
         ok: true,
@@ -16,6 +19,9 @@ const crearUsuario = async (req = request, res = response) => {
 const actualizarUsuaurio = async (req = request, res = response) => {
     const { id } = req.params
     const { password, rol, estado, ...newBody } = req.body
+    const salt = bcryptjs.genSaltSync();
+    pwsecrp = bcryptjs.hashSync(password, salt);
+    newBody.password = pwsecrp
     const usuarioDB = await usuario.findByIdAndUpdate(id, newBody)
     if (!usuarioDB) {
         return res.status(494).json({
@@ -32,6 +38,10 @@ const actualizarUsuaurio = async (req = request, res = response) => {
 const actulziarEstadoUsuario = async (req = request, res = response) => {
     const { id } = req.params
     const { estado } = req.body
+    if(estado=='false' || estado =='true'){
+        
+    }
+
     const usuarioDB = await usuario.findByIdAndUpdate(id, estado)
     if (!usuarioDB) {
         return res.status(404).json({
