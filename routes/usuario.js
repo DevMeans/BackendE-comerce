@@ -28,6 +28,7 @@ router.put('/estado/:id', [
 )
 router.get('/', [],
     listarUsuarios)
+    
 router.get('/:id', [],
     ObtenerUsuario)
 module.exports = router
