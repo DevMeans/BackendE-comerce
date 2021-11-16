@@ -38,10 +38,6 @@ const actualizarUsuaurio = async (req = request, res = response) => {
 const actulziarEstadoUsuario = async (req = request, res = response) => {
     const { id } = req.params
     const { estado } = req.body
-    if(estado=='false' || estado =='true'){
-        
-    }
-
     const usuarioDB = await usuario.findByIdAndUpdate(id, estado)
     if (!usuarioDB) {
         return res.status(404).json({
