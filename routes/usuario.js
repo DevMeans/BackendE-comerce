@@ -25,7 +25,7 @@ router.put('/:id', [
 
 router.put('/estado/:id', [
     validarjwt,
-    check('estado', 'No es un rol valido').isIn(['true', 'false']),
+    check('estado', 'el valor no es permitido true/false').isIn(['true', 'false']),
     validarCampos
 ],
     actulziarEstadoUsuario
