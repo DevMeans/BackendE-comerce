@@ -8,7 +8,8 @@ class Server {
         this.port = process.env.PORT
         this.paths = {
             usuario: '/api/usuario',
-            auth: '/api/auth'
+            auth: '/api/auth',
+            categoria: '/api/categoria'
         }
         this.conexMongoDB()
         this.middlewares()
@@ -25,6 +26,7 @@ class Server {
     routes() {
         this.app.use(this.paths.usuario, require('../routes/usuario'))
         this.app.use(this.paths.auth, require('../routes/auth'))
+        this.app.use(this.paths.categoria, require('../routes/categoria'))
     }
     listen() {
         this.app.listen(this.port, () => console.log(`Servidor corriendo en el puerto  ${this.port}`))

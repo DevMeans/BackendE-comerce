@@ -11,7 +11,7 @@ const crearUsuario = async (req = request, res = response) => {
     await usuarioDB.save()
     res.json({
         ok: true,
-        usuarioDB,
+        result: usuarioDB,
         msg: 'Estas en el controlador crear usuario !!!!'
     })
 }
@@ -61,7 +61,7 @@ const ObtenerUsuario = async (req = request, res = response) => {
     }
     return res.json({
         ok: true,
-        results: usuarioDB
+        result: usuarioDB
 
     })
 }

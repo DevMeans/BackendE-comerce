@@ -16,6 +16,7 @@ router.post('/', [
 ],
     crearUsuario)
 router.put('/:id', [
+    validarjwt,
     check('correo').custom(validarCorreo),
     validarCampos
 ],
@@ -23,14 +24,23 @@ router.put('/:id', [
 )
 
 router.put('/estado/:id', [
+    validarjwt,
     check('estado', 'No es un rol valido').isIn(['true', 'false']),
     validarCampos
 ],
     actulziarEstadoUsuario
 )
-router.get('/', [],
+router.get('/', [
+
+    validarjwt,
+
+],
     listarUsuarios)
-    
-router.get('/:id', [],
+
+router.get('/:id', [
+
+    validarjwt,
+
+],
     ObtenerUsuario)
 module.exports = router
