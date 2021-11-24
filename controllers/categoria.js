@@ -26,7 +26,7 @@ const actualizarCategoria = async (req = request, res = response) => {
     return res.json({
         ok: true,
         msg: `categoria actualizada correctamente`,
-        categoriaDB
+        result:categoriaDB
     })
 }
 const actualizarEstadoCategoria = async (req = request, res = response) => {
@@ -48,7 +48,7 @@ const actualizarEstadoCategoria = async (req = request, res = response) => {
     return res.json({
         ok: true,
         msg: `categoria:/ estado  actualizada correctamente`,
-        categoriaDB
+        result:categoriaDB
     })
 }
 const obtenerCategoria = async (req = request, res = response) => {
