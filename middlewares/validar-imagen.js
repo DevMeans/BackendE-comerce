@@ -8,30 +8,33 @@ const validarImagen = (req = request, res = response, next) => {
         })
     }
     const extensionesValida = ['png', 'jpg', 'jpeg', 'gif'];
-    const archivo = req.files.img  
-    let arrayArchivosTemp = [] 
+    const archivo = req.files.img
+    let arrayArchivosTemp = []
     let cantidad = 0
- //   console.log(req.files.img)//si el archivo es solo bota el objeto si son 2 es un arreglo que tiene objetos
-    if(archivo.length==undefined){
-        let extencion=archivo.mimetype.split('/')[1]
+    //   console.log(req.files.img)//si el archivo es solo bota el objeto si son 2 es un arreglo que tiene objetos
+    if (archivo.length == undefined) {
+        let extencion = archivo.mimetype.split('/')[1]
         if (!extensionesValida.includes(extencion)) {
-            return res.status(400).json({
+            return res.status(403).json({
                 ok: false,
                 msg: 'No es una extension permitida'
             });
         }
-        
-       console.log(extencion) 
-    }else{
+    } else {
         for (let i = 0; i < archivo.length; i++) {
             let elemento = archivo[i]
             arrayArchivosTemp.push(elemento)
-            let extencion =archivo[i].mimetype.split('/')[1]
-            console.log(extencion)
+            let extencion = archivo[i].mimetype.split('/')[1]
+            if (!extensionesValida.includes(extencion)) {
+                return res.status(403).json({
+                    ok: false,
+                    msg: 'No es una extension permitida'
+                });
+            }
         }
-
     }
-    console.log(arrayArchivosTemp)
+    
+
     next()
 }
 module.exports = {

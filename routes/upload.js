@@ -1,26 +1,36 @@
 const Router = require("express");
-const fileUpload = require('express-fileupload');
-const { uploadTest } = require("../controllers/test-1");
-const { guardarImagen } = require("../controllers/upload");
-const { upload } = require("../middlewares/subir-archivo");
+const { check } = require("express-validator");
+const { guardarImagen, subirImagen, testimagen, actualizarImagen } = require("../controllers/upload");
+const { subircloudinary } = require("../controllers/uploadcloudinary");
+const { validaridCategoria, colecionesPermitidas } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
-const { validarImagen } = require("../middlewares/validar-imagen");
-
+const { validarjwt } = require('../middlewares/validar-jwt')
+const  { upload } =require("../middlewares/subir-archivo")
 const router = Router()
 
-router.use(fileUpload());
-router.post('/', [
-    upload
+
+router.post('/:coleccion/:id', [
+    validarjwt,
+    check('id', 'No es un id de mongo').isMongoId(),
+    check('id').custom(validaridCategoria),
+    check('coleccion', 'el valor no es permitido categoria/producto').isIn(['categoria', 'producto']),
+    upload,
+    validarCampos,
+
 ],
     guardarImagen)
 
 
-router.post('/test', [
-    validarImagen,
+router.post('/test/:coleccion/:id', [
+    check('id', 'No es un id valido').isMongoId(),
+    check('coleccion').custom(c => colecionesPermitidas(c, ['usuario', 'producto', 'categoria'])),
     validarCampos
-    
-
-], uploadTest)
+], subirImagen)
 
 
+router.put('/test/:coleccion/:id', [
+    check('id', 'No es un id valido').isMongoId(),
+    check('coleccion').custom(c => colecionesPermitidas(c, ['usuario', 'producto', 'categoria'])),
+    validarCampos
+], subircloudinary)
 module.exports = router
